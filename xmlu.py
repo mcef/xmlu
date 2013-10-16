@@ -27,6 +27,11 @@ try:
 except ImportError:
     from xml.etree import ElementTree as etree
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
 class Type(object):
     '''Base class that represents types XML can be unmarshalled to..
 
@@ -468,12 +473,12 @@ class Value(Type):
 def unmarshal(xml, type):
     '''A helper function for unmarshalling xml.
 
-    If xml is instance of basestring, calls type(etree.fromstring(xml)).
+    If xml is instance of str or unicode, calls type(etree.fromstring(xml)).
     If xml is instace of etree._Element, calls type(xml).
     Else, calls type(etree.parse(xml)).'''
     if isinstance(xml, etree._Element):
         pass
-    if isinstance(xml, basestring):
+    if isinstance(xml, (str, unicode)):
         xml = etree.fromstring(xml)
     else:
         xml = etree.parse(xml)
